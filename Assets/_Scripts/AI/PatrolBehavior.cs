@@ -21,10 +21,13 @@ public class PatrolBehavior : MonoBehaviour
     public float timeBetweenFire;
     public float LastShoot;
 
+    public DoorScript[] doors;
+
     private void Start()
     {
         startPos = transform.position;
         enemies = FindObjectsOfType<PatrolBehavior>();
+        doors = FindObjectsOfType<DoorScript>();
     }
 
     private void Update()
@@ -83,8 +86,11 @@ public class PatrolBehavior : MonoBehaviour
     {
         for (int i = 0; i < enemies.Length; i++)
         {
-            enemies[i].GetComponent<PandaBehaviour>().Reset();
-            enemies[i].agent.SetDestination(LastPos);
+            if (enemies[i] != null)
+            {
+                enemies[i].GetComponent<PandaBehaviour>().Reset();
+                enemies[i].agent.SetDestination(LastPos);
+            }
         }
     }
 
@@ -92,6 +98,7 @@ public class PatrolBehavior : MonoBehaviour
     void ReturnToBase()
     {
         agent.SetDestination(startPos);
+        UnlockDoors();
     }
 
     [Task]
@@ -153,5 +160,27 @@ public class PatrolBehavior : MonoBehaviour
             }
         }
         Task.current.Succeed();
+    }
+
+    [Task]
+    void LockDoors()
+    {
+        for (int i = 0; i < doors.Length; i++)
+        {
+            if (doors[i].isOpen)
+            {
+                doors[i].openClose();
+            }
+            doors[i].isLocked = true;
+        }
+        Task.current.Succeed();
+    }
+
+    void UnlockDoors()
+    {
+        for (int i = 0; i < doors.Length; i++)
+        {
+            doors[i].isLocked = false;
+        }
     }
 }

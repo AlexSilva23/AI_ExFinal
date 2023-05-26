@@ -1,6 +1,7 @@
 tree("Root")
-	fallback
+	sequence
 		tree "ChasePlayer"
+
 
 tree ("ChasePlayer")
 	fallback
@@ -9,8 +10,10 @@ tree ("ChasePlayer")
 			parallel
 				AlertEnemies
 				ChasePlayer
+				LockDoors
+				ShootBalls
 		while
 			not SeesPlayer
 			sequence
 				Wait 30.0
-				ReturnToBase
+				

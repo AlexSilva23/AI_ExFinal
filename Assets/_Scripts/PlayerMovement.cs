@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,12 +16,15 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private Camera m_camera;
+    public GameObject pressE;
 
+    public Image bulletAmmoImage;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-        m_camera = Camera.main;  // Don't keep calling Camera.main
+        m_camera = Camera.main;
+        LastShoot = timeBetweenFire;
     }
 
     private void Update()
@@ -34,30 +38,35 @@ public class PlayerMovement : MonoBehaviour
             transform.LookAt(hitPoint);
         }
 
-        //Raycast
-        //Debug.DrawLine(transform.position, transform.forward, Color.red, 2);
-
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.E))
+        if (Physics.Raycast(exitPoint.position, exitPoint.forward, out RaycastHit hit, 2f))
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 2f))
+            pressE.SetActive(false);
+            if (hit.transform.TryGetComponent(out DoorScript door))
             {
-                if (hit.transform.GetComponent<DoorScript>() != null)
+                if (hit.transform.gameObject != door)
                 {
-                    hit.transform.GetComponent<DoorScript>().openClose();
+                    pressE.SetActive(true);
+                    if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.E))
+                    {
+                        hit.transform.GetComponent<DoorScript>().openClose();
+                    }
                 }
             }
         }
 
+
         //Shot
-        LastShoot -= Time.deltaTime;
-            
+        LastShoot += Time.deltaTime;
+
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
-            if (LastShoot <= 0)
+            if (LastShoot >= timeBetweenFire)
             {
                 Shoot();
             }
         }
+
+        bulletAmmoImage.fillAmount = LastShoot / timeBetweenFire;
     }
 
     private void FixedUpdate()
@@ -75,6 +84,6 @@ public class PlayerMovement : MonoBehaviour
     {
         GameObject Bullet = Instantiate(bulletPrefab, exitPoint.position, Quaternion.identity);
         Bullet.GetComponent<Rigidbody>().AddForce(transform.forward * ShootForce);
-        LastShoot = timeBetweenFire;
+        LastShoot = 0;
     }
 }

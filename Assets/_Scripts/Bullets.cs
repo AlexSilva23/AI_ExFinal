@@ -19,10 +19,12 @@ public class Bullets : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.GetComponent<AIHealth> != null)
+        if (collision.gameObject.TryGetComponent(out AIHealth hp))
         {
             AIHealth Enemy = collision.gameObject.GetComponent<AIHealth>();
             Enemy.HP -= Random.Range(Damage - 2, Damage + 2);
+            Enemy.CheckDeath();
+            Destroy(gameObject);
         }
     }
 
