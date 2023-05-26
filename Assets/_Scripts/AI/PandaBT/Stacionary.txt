@@ -1,0 +1,16 @@
+tree("Root")
+	fallback
+		tree "ChasePlayer"
+
+tree ("ChasePlayer")
+	fallback
+		while
+			SeesPlayer
+			parallel
+				AlertEnemies
+				ChasePlayer
+		while
+			not SeesPlayer
+			sequence
+				Wait 30.0
+				ReturnToBase

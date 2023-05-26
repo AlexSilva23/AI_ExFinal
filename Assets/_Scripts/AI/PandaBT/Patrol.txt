@@ -1,0 +1,33 @@
+tree("Root")
+	fallback
+		sequence
+			fallback
+				AwarePlayer
+				SeesPlayer
+			tree "ChasePlayer"
+		tree "Patrol"
+
+tree("Patrol")
+		sequence
+			not isMoving
+			SetDestination_Random(15)
+
+tree ("ChasePlayer")
+	sequence
+		ChasePlayer
+		fallback
+				race
+					ShootBalls
+					SeesPlayer
+			sequence
+				parallel
+					openDoor
+					LastPosFunc
+					while
+						not SeesPlayer
+						race
+							sequence
+								Wait 10.0
+								ForgetPlayer
+							repeat
+								SetDestination_Random(2)
