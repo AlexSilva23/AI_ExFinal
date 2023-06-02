@@ -9,8 +9,6 @@ public class DoorScript : MonoBehaviour
 
     private Animator anim;
 
-    public GenerateNavmesh navMesh;
-
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -29,8 +27,4 @@ public class DoorScript : MonoBehaviour
         anim.SetBool("OpenClose", isOpen);
     }
 
-    public void UpdateMesh()
-    {
-        navMesh.UpdateNavmesh();
-    }
 }

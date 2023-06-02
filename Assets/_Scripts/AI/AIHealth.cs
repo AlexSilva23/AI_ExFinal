@@ -2,8 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Type
+{
+    Player,
+    Patrol,
+    Stacionary
+}
+
 public class AIHealth : MonoBehaviour
 {
+
+    public Type type;
     public float HP;
 
     public float cubeSize = 0.2f;
@@ -17,10 +26,13 @@ public class AIHealth : MonoBehaviour
     public float explosionUpward = 0.4f;
     public Color cubesColor;
 
+    PatrolBehavior patrolController;
+
     private void Start()
     {
         cubesPivotDistance = cubeSize * cubesInRow / 2;
         cubesPivot = new Vector3(cubesPivotDistance, cubesPivotDistance, cubesPivotDistance);
+        patrolController = GetComponent<PatrolBehavior>();
     }
 
     public void CheckDeath()
@@ -33,6 +45,10 @@ public class AIHealth : MonoBehaviour
 
     public void Die()
     {
+        if (type == Type.Stacionary)
+        {
+            patrolController.UnlockDoors();
+        }
         GetComponentInParent<DestroyGameobject>().enabled = true;
         gameObject.SetActive(false);
 
@@ -55,6 +71,12 @@ public class AIHealth : MonoBehaviour
             {
                 rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, explosionUpward);
             }
+        }
+
+        if (type == Type.Player)
+        {
+            //Menu Gameover
+
         }
     }
 

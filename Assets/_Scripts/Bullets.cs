@@ -21,11 +21,16 @@ public class Bullets : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out AIHealth hp))
         {
-            AIHealth Enemy = collision.gameObject.GetComponent<AIHealth>();
-            Enemy.HP -= Random.Range(Damage - 2, Damage + 2);
-            Enemy.CheckDeath();
-            Destroy(gameObject);
+            Debug.Log(GetComponent<Rigidbody>().velocity.x);
+            if (GetComponent<Rigidbody>().velocity.x > 3 || GetComponent<Rigidbody>().velocity.x < -3)
+            {
+                AIHealth Enemy = collision.gameObject.GetComponent<AIHealth>();
+                Enemy.HP -= Random.Range(Damage - 2, Damage + 2);
+                Enemy.CheckDeath();
+                Destroy(gameObject);
+            }
         }
+
     }
 
 }

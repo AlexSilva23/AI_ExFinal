@@ -143,7 +143,7 @@ public class PatrolBehavior : MonoBehaviour
                 agent.ResetPath();
             }
         }
-        Task.current.Fail();
+        Task.current.Succeed();
     }
 
     [Task]
@@ -176,7 +176,7 @@ public class PatrolBehavior : MonoBehaviour
         Task.current.Succeed();
     }
 
-    void UnlockDoors()
+    public void UnlockDoors()
     {
         for (int i = 0; i < doors.Length; i++)
         {

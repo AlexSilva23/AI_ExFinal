@@ -15,19 +15,15 @@ tree("Patrol")
 tree ("ChasePlayer")
 	sequence
 		ChasePlayer
-		fallback
+		ShootBalls
+		parallel
+			openDoor
+			LastPosFunc
+			while
+				not SeesPlayer
 				race
-					ShootBalls
-					SeesPlayer
-			sequence
-				parallel
-					openDoor
-					LastPosFunc
-					while
-						not SeesPlayer
-						race
-							sequence
-								Wait 10.0
-								ForgetPlayer
-							repeat
-								SetDestination_Random(2)
+					sequence
+						Wait 10.0
+						ForgetPlayer
+					repeat
+						SetDestination_Random(2)
