@@ -16,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody _rb;
     private Camera m_camera;
-    public GameObject pressE;
 
     public Image bulletAmmoImage;
 
@@ -40,12 +39,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(exitPoint.position, exitPoint.forward, out RaycastHit hit, 2f))
         {
-            pressE.SetActive(false);
             if (hit.transform.TryGetComponent(out DoorScript door))
             {
                 if (hit.transform.gameObject != door)
                 {
-                    pressE.SetActive(true);
                     if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.E))
                     {
                         hit.transform.GetComponent<DoorScript>().openClose();

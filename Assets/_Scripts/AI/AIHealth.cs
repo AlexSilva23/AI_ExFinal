@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Type
 {
@@ -14,6 +15,7 @@ public class AIHealth : MonoBehaviour
 
     public Type type;
     public float HP;
+    public float MaxHP;
 
     public float cubeSize = 0.2f;
     public int cubesInRow = 5;
@@ -28,6 +30,8 @@ public class AIHealth : MonoBehaviour
 
     PatrolBehavior patrolController;
 
+    public Image hpSlider;
+
     private void Start()
     {
         cubesPivotDistance = cubeSize * cubesInRow / 2;
@@ -40,6 +44,10 @@ public class AIHealth : MonoBehaviour
         if (HP <= 0)
         {
             Die();
+        }
+        if (type == Type.Player)
+        {
+            UpdateHPSlider();
         }
     }
 
@@ -93,5 +101,10 @@ public class AIHealth : MonoBehaviour
         piece.GetComponent<Rigidbody>().mass = cubeSize;
         piece.transform.parent = transform.parent;
         piece.GetComponent<Renderer>().material.SetColor("_Color", cubesColor);
+    }
+
+    public void UpdateHPSlider()
+    {
+        hpSlider.fillAmount = HP / MaxHP;
     }
 }
