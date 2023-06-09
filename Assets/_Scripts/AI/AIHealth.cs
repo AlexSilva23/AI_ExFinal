@@ -31,7 +31,7 @@ public class AIHealth : MonoBehaviour
     PatrolBehavior patrolController;
 
     public Image hpSlider;
-
+    public GameObject deadScreen;
     private void Start()
     {
         cubesPivotDistance = cubeSize * cubesInRow / 2;
@@ -83,8 +83,8 @@ public class AIHealth : MonoBehaviour
 
         if (type == Type.Player)
         {
-            //Menu Gameover
-
+            Time.timeScale = 0;
+            deadScreen.SetActive(true);
         }
     }
 
