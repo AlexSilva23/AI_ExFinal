@@ -26,7 +26,7 @@ public class PatrolBehavior : MonoBehaviour
     private void Start()
     {
         startPos = transform.position;
-        enemies = FindObjectsOfType<PatrolBehavior>();
+        //enemies = FindObjectsOfType<PatrolBehavior>();
         doors = FindObjectsOfType<DoorScript>();
     }
 
@@ -92,6 +92,8 @@ public class PatrolBehavior : MonoBehaviour
                 enemies[i].agent.SetDestination(LastPos);
             }
         }
+
+        Task.current.Succeed();
     }
 
     [Task]

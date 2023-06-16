@@ -21,7 +21,7 @@ public class Bullets : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent(out AIHealth hp))
         {
-            Debug.Log(GetComponent<Rigidbody>().velocity.x);
+            //Debug.Log(GetComponent<Rigidbody>().velocity.x);
             if (GetComponent<Rigidbody>().velocity.x > 3 || GetComponent<Rigidbody>().velocity.x < -3)
             {
                 AIHealth Enemy = collision.gameObject.GetComponent<AIHealth>();
