@@ -18,6 +18,14 @@ public class DoorScript : MonoBehaviour
         if (!isLocked)
         {
             isOpen = !isOpen;
+            if (gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                gameObject.layer = LayerMask.NameToLayer("Bullet");
+            }
+            else
+            {
+                gameObject.layer = LayerMask.NameToLayer("Default");
+            }
             PlayAnimation();
         }
     }

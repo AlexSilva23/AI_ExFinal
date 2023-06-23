@@ -22,12 +22,18 @@ public class PatrolBehavior : MonoBehaviour
     public float LastShoot;
 
     public DoorScript[] doors;
+    public LayerMask LayerMaskIgnore;
+
+    delegate void MyDelegate();
+    static MyDelegate myDelegate;
 
     private void Start()
     {
         startPos = transform.position;
         //enemies = FindObjectsOfType<PatrolBehavior>();
         doors = FindObjectsOfType<DoorScript>();
+        myDelegate += SetAwareTrue;
+        //myDelegate();
     }
 
     private void Update()
@@ -44,7 +50,7 @@ public class PatrolBehavior : MonoBehaviour
     [Task]
     bool SeesPlayer()
     {
-        if (Physics.Raycast(transform.position, (player.position - transform.position), out hit))
+        if (Physics.Raycast(transform.position, (player.position - transform.position), out hit, Mathf.Infinity, ~LayerMaskIgnore))
         {
             if (hit.transform == player)
             {
@@ -84,14 +90,16 @@ public class PatrolBehavior : MonoBehaviour
     [Task]
     void AlertEnemies()
     {
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i] != null)
-            {
-                enemies[i].GetComponent<PandaBehaviour>().Reset();
-                enemies[i].agent.SetDestination(LastPos);
-            }
-        }
+        //for (int i = 0; i < enemies.Length; i++)
+        //{
+        //    if (enemies[i] != null)
+        //    {
+        //        enemies[i].GetComponent<PandaBehaviour>().Reset();
+        //        enemies[i].agent.SetDestination(LastPos);
+        //    }
+        //}
+
+        myDelegate();
 
         Task.current.Succeed();
     }
@@ -106,7 +114,6 @@ public class PatrolBehavior : MonoBehaviour
     [Task]
     bool LastPosFunc()
     {
-        Debug.Log(Vector3.Distance(transform.position, LastPos) < .7);
         return Vector3.Distance(transform.position, LastPos) < .7;
     }
 
@@ -116,6 +123,12 @@ public class PatrolBehavior : MonoBehaviour
         agent.transform.eulerAngles = new Vector3(agent.transform.rotation.x + Random.Range(0, 360),
             agent.transform.rotation.y + Random.Range(0, 360),
             agent.transform.rotation.z + Random.Range(0, 360));
+    }
+
+    public void SetAwareTrue()
+    {
+        AwareOfPlayer = true;
+        LastPos = player.position;
     }
 
     [Task]
@@ -155,7 +168,7 @@ public class PatrolBehavior : MonoBehaviour
         {
             if (hit.transform.GetComponent<DoorScript>() != null)
             {
-                if (!hit.transform.GetComponent<DoorScript>().isOpen)
+                if (!hit.transform.GetComponent<DoorScript>().isOpen && !hit.transform.GetComponent<DoorScript>().isLocked)
                 {
                     hit.transform.GetComponent<DoorScript>().openClose();
                 }
