@@ -15,6 +15,6 @@ tree ("ChasePlayer")
 		while
 			not SeesPlayer
 			sequence
-				Wait 10.0
+				Wait 15.0
 				ReturnToBase
 				
